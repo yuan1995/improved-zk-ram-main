@@ -371,7 +371,7 @@ def slide_rom_invariant() -> Slide:
 
 
 def slide_set_membership() -> Slide:
-    s = Slide("Set Membership Queries", "把集合当作 value 为空的 ROM。")
+    s = Slide("Set Membership Queries", "把集合当作 value 为空的 ROM；查询序列对应 LOAD(1), LOAD(0), LOAD(1)。")
     s.textbox(
         0.8,
         1.45,
@@ -392,12 +392,29 @@ def slide_set_membership() -> Slide:
             ["setup", "", "(1,0), (2,0), (3,0)"],
             ["member(1)", "(1,0)", "(1,1)"],
             ["member(2)", "(2,0)", "(2,1)"],
-            ["member(1)", "(1,1)", "(1,2)"],
-            ["teardown", "(1,2),(2,1),(3,0)", ""],
+            ["member(2)", "(2,1)", "(2,2)"],
+            ["teardown", "(1,1),(2,2),(3,0)", ""],
         ],
         [1.3, 1.9, 2.25],
         0.45,
         11,
+    )
+    s.textbox(
+        0.8,
+        2.95,
+        5.0,
+        1.5,
+        [
+            "本例查询来自 LOAD(1), LOAD(0), LOAD(1)：",
+            "每次访问做一次 member(clock − t)，",
+            "diff = 1, 2, 2，",
+            "依次 member(1), member(2), member(2)。",
+        ],
+        15,
+        "#0f172a",
+        fill="#ffffff",
+        outline="#bbf7d0",
+        radius=True,
     )
     s.textbox(
         0.85,
@@ -558,20 +575,20 @@ def slide_teardown() -> Slide:
         header_fill="#fef3c7",
     )
     s.table(
-        6.25,
+        5.95,
         1.25,
         [
-            ["Set writes", "Set reads"],
-            ["(1,0)", "(1,0)"],
-            ["(2,0)", "(2,0)"],
-            ["(3,0)", "(1,1)"],
-            ["(1,1)", "(1,2)"],
-            ["(2,1)", "(2,1)"],
-            ["(1,2)", "(3,0)"],
+            ["Set writes", "来源", "Set reads", "来源"],
+            ["(1,0)", "setup", "(1,0)", "member(1)"],
+            ["(1,1)", "member(1)", "(1,1)", "member(1)"],
+            ["(1,2)", "member(1)", "(1,2)", "teardown"],
+            ["(2,0)", "setup", "(2,0)", "member(2)"],
+            ["(2,1)", "member(2)", "(2,1)", "teardown"],
+            ["(3,0)", "setup", "(3,0)", "teardown"],
         ],
-        [2.5, 2.5],
+        [1.45, 1.2, 1.45, 1.55],
         0.39,
-        12,
+        10,
         header_fill="#dcfce7",
     )
     s.textbox(
@@ -579,7 +596,7 @@ def slide_teardown() -> Slide:
         5.25,
         11.65,
         0.75,
-        ["检查 RAM reads ~ writes，同时检查 Set reads ~ writes；这就是标题里的 two shuffles。"],
+        ["检查 RAM reads ~ writes，同时检查 Set reads ~ writes；Set 表按 tuple 排序展示多重集合相等。"],
         22,
         "#0f172a",
         fill="#ffffff",
